@@ -9,6 +9,8 @@ import android.support.test.InstrumentationRegistry;
 import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
+import android.support.test.uiautomator.BySelector;
+import android.support.test.uiautomator.Direction;
 import android.support.test.uiautomator.UiAutomatorTestCase;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
@@ -31,7 +33,6 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 @SdkSuppress(minSdkVersion = 18)
-@LargeTest
 public class UITest {
 
     private UiDevice mDevice;
@@ -46,8 +47,8 @@ public class UITest {
 
         // Start from the home screen
         mDevice.pressHome();
+//        openApp(OTHER_PACKAGE);
 
-        openApp(OTHER_PACKAGE);
     }
 
 //    @Test
@@ -55,28 +56,65 @@ public class UITest {
 //        assertThat(mDevice, notNullValue());
 //    }
 
+    /**
+     * 測試開啟 GooglePlay 商店及 YouTube
+     * @throws UiObjectNotFoundException
+     */
     @Test
-    public void testRxjava() throws UiObjectNotFoundException {
-        Log.d("msg", "UITest testRxjava: " + mDevice.getCurrentPackageName());
-        UiObject2 btnFragment1 = mDevice.findObject(By.res("com.example.rxjava.hank.rxjavasample:id/btn_fragment1"));
+    public void testGooglePlay() throws UiObjectNotFoundException {
 
-        // 按下後等待五秒
-        btnFragment1.clickAndWait(Until.newWindow(), 5000);
+        /** 用 UiObject 取得 play 商店 icon */
+//        UiObject btnG = mDevice.findObject(new UiSelector()
+//                .text("Play 商店"));
+//        if(btnG.exists()) {
+//            btnG.click();
+//        } else {
+//            Log.d("msg", "btnGooglePlay is null");
+//        }
+        /** 用 UiObject2 取得 play 商店 icon */
+        UiObject2 btnGooglePlay = mDevice.findObject(By.text("Play 商店"));
+//        if(null != btnGooglePlay) {
+//            btnGooglePlay.click();
+//        } else {
+//            Log.d("msg", "btnGooglePlay is null");
+//        }
+        /** 從 play 商店取得父元素(桌面 view )*/
+//        UiObject2 deskView = btnGooglePlay.getParent();
+//        if(null != deskView) {
+//            // 向左滑動
+//            deskView.swipe(Direction.LEFT, 0.5f);
+//        } else {
+//            Log.d("msg", "deskView is null");
+//        }
 
-
-        UiObject btnFragment2 = mDevice.findObject(new UiSelector()
-                .text("f2")
-                .className("android.widget.Button"));
-
-        if(btnFragment2.exists()) {
-            btnFragment2.click();
+        UiObject2 btnGoogleSet = mDevice.findObject(By.text("Google"));
+        if(null != btnGooglePlay) {
+            btnGoogleSet.clickAndWait(Until.newWindow(), 3000);
+        } else {
+            Log.d("msg", "Google is null");
         }
 
-        btnFragment1.click();
-        UiObject2 btnGetVersion = mDevice.findObject(By.res("com.example.rxjava.hank.rxjavasample:id/btn_get_version"));
-        btnGetVersion.clickAndWait(Until.newWindow(), 5000);
+        UiObject2 btnYoutube = mDevice.findObject(By.text("YouTube"));
+        if(null != btnYoutube) {
+            btnYoutube.clickAndWait(Until.newWindow(), 10000);
+        } else {
+            Log.d("msg", "btnYoutube is null");
+        }
 
+        UiObject2 btnMyCollectinon = mDevice.findObject(By.text("我的合輯"));
+
+        boolean hasCollect = mDevice.hasObject(By.text("我的合輯"));
+        Log.d("msg", "hasCollect: " + hasCollect);
+        if(null != btnMyCollectinon) {
+            btnMyCollectinon.clickAndWait(Until.newWindow(), 10000);
+        } else {
+            Log.d("msg", "btnYoutube is null");
+        }
+
+//        mDevice.wait(Until.hasObject(By.desc("計算機")), LAUNCH_TIMEOUT);
+//        mDevice.findObject(By.desc("計算機")).click();
     }
+
 
     private String getLauncherPackageName() {
         // Create launcher Intent
