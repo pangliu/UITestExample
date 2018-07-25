@@ -39,9 +39,6 @@ public class RxjavaSampleTest {
         mDevice.pressHome();
         openApp(OTHER_PACKAGE);
 
-//        final String launcherPackage = getLauncherPackageName();
-//        assertThat(launcherPackage, notNullValue());
-//        mDevice.wait(Until.hasObject(By.pkg(launcherPackage).depth(0)), LAUNCH_TIMEOUT);
     }
 
     @Test

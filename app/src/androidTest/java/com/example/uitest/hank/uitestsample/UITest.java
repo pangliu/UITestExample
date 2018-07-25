@@ -78,7 +78,7 @@ public class UITest {
 //        } else {
 //            Log.d("msg", "btnGooglePlay is null");
 //        }
-        /** 從 play 商店取得父元素(桌面 view )*/
+        /** 從 play 商店取得父元素(桌面 view ) */
 //        UiObject2 deskView = btnGooglePlay.getParent();
 //        if(null != deskView) {
 //            // 向左滑動
@@ -89,14 +89,14 @@ public class UITest {
 
         UiObject2 btnGoogleSet = mDevice.findObject(By.text("Google"));
         if(null != btnGooglePlay) {
-            btnGoogleSet.clickAndWait(Until.newWindow(), 3000);
+            btnGoogleSet.clickAndWait(Until.newWindow(), 1000);
         } else {
             Log.d("msg", "Google is null");
         }
 
         UiObject2 btnYoutube = mDevice.findObject(By.text("YouTube"));
         if(null != btnYoutube) {
-            btnYoutube.clickAndWait(Until.newWindow(), 10000);
+            btnYoutube.clickAndWait(Until.newWindow(), 1000);
         } else {
             Log.d("msg", "btnYoutube is null");
         }
