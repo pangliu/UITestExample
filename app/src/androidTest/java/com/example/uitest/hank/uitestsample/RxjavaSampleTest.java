@@ -61,6 +61,8 @@ public class RxjavaSampleTest {
         UiObject2 btnf2 = mDevice.findObject(By.res("com.example.rxjava.hank.rxjavasample:id/btn_fragment2"));
         Log.d("msg", "btnf2 isExist: " + btnf2);
         if(null != btnf2) {
+            String btnText = btnf2.getText();
+            Log.d("msg", "text: " + btnText);
             btnf2.clickAndWait(Until.newWindow(), 3000);
         }
 

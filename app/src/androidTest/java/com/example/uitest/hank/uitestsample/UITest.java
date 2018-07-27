@@ -1,17 +1,14 @@
 package com.example.uitest.hank.uitestsample;
 
-import android.app.Instrumentation;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.Point;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.LargeTest;
 import android.support.test.filters.SdkSuppress;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.test.uiautomator.BySelector;
 import android.support.test.uiautomator.Direction;
-import android.support.test.uiautomator.UiAutomatorTestCase;
 import android.support.test.uiautomator.UiDevice;
 import android.support.test.uiautomator.UiObject;
 import android.support.test.uiautomator.UiObject2;
@@ -20,8 +17,8 @@ import android.support.test.uiautomator.UiSelector;
 import android.support.test.uiautomator.Until;
 import android.support.test.uiautomator.By;
 import android.util.Log;
+import android.widget.FrameLayout;
 
-import junit.framework.TestCase;
 import static org.junit.Assert.assertThat;
 import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertEquals;
@@ -37,9 +34,10 @@ public class UITest {
 
     private UiDevice mDevice;
     private static final int LAUNCH_TIMEOUT = 5000;
+    private static final int CLICK_TIMEOUT = 3000;
     private final String BASIC_SAMPLE_PACKAGE = "com.example.uitest.hank.uitestsample";
     private final String OTHER_PACKAGE = "com.example.rxjava.hank.rxjavasample";
-
+    private final String DESKTOP_PACKAGE = "com.asus.launcher";
     @Before
     public void setUp() {
         Log.d("msg", "UITest setUp");
@@ -47,6 +45,7 @@ public class UITest {
 
         // Start from the home screen
         mDevice.pressHome();
+
 //        openApp(OTHER_PACKAGE);
 
     }
@@ -61,7 +60,22 @@ public class UITest {
      * @throws UiObjectNotFoundException
      */
     @Test
-    public void testGooglePlay() throws UiObjectNotFoundException {
+    public void testGooglePlay() {
+
+        int height = mDevice.getDisplayHeight();
+        int width = mDevice.getDisplayWidth();
+        int left = width + 100;
+        int right = 0;
+        int step = 5;
+        Log.d("msg", "height: " + height);
+        Log.d("msg", "width: " + width);
+        /**
+         * 從左邊向右滑動頁面
+         */
+        boolean result = mDevice.swipe(right, height/2, left, height/2, step);
+        Log.d("msg", "Swipe result (Right to Left) = " + result);
+        result = mDevice.waitForWindowUpdate(DESKTOP_PACKAGE, CLICK_TIMEOUT);
+        Log.i("msg", "wait For Window Update, result = "  + result);
 
         /** 用 UiObject 取得 play 商店 icon */
 //        UiObject btnG = mDevice.findObject(new UiSelector()
@@ -72,7 +86,7 @@ public class UITest {
 //            Log.d("msg", "btnGooglePlay is null");
 //        }
         /** 用 UiObject2 取得 play 商店 icon */
-        UiObject2 btnGooglePlay = mDevice.findObject(By.text("Play 商店"));
+//        UiObject2 btnGooglePlay = mDevice.findObject(By.text("Play 商店"));
 //        if(null != btnGooglePlay) {
 //            btnGooglePlay.click();
 //        } else {
@@ -86,33 +100,37 @@ public class UITest {
 //        } else {
 //            Log.d("msg", "deskView is null");
 //        }
-
+        /**
+         * 取得 google 工具 icon
+         */
         UiObject2 btnGoogleSet = mDevice.findObject(By.text("Google"));
-        if(null != btnGooglePlay) {
-            btnGoogleSet.clickAndWait(Until.newWindow(), 1000);
+        if (null != btnGoogleSet) {
+            btnGoogleSet.clickAndWait(Until.newWindow(), CLICK_TIMEOUT);
         } else {
             Log.d("msg", "Google is null");
         }
 
-        UiObject2 btnYoutube = mDevice.findObject(By.text("YouTube"));
-        if(null != btnYoutube) {
-            btnYoutube.clickAndWait(Until.newWindow(), 1000);
+        /**
+         * 點擊 YouTube 中 我的合輯
+         */
+        boolean hasYouTubBtn = mDevice.hasObject(By.text("YouTube"));
+        if (hasYouTubBtn) {
+            UiObject2 btnYoutube = mDevice.findObject(By.text("YouTube"));
+            btnYoutube.clickAndWait(Until.newWindow(), CLICK_TIMEOUT);
         } else {
-            Log.d("msg", "btnYoutube is null");
+            Log.d("msg", "btnYoutube is not exist");
+            return;
         }
 
-        UiObject2 btnMyCollectinon = mDevice.findObject(By.text("我的合輯"));
-
-        boolean hasCollect = mDevice.hasObject(By.text("我的合輯"));
+        boolean hasCollect = mDevice.hasObject(By.textContains("我的合輯"));
         Log.d("msg", "hasCollect: " + hasCollect);
-        if(null != btnMyCollectinon) {
-            btnMyCollectinon.clickAndWait(Until.newWindow(), 10000);
+        if (hasCollect) {
+            UiObject2 btnMyCollectinon = mDevice.findObject(By.textContains("我的合輯"));
+            btnMyCollectinon.clickAndWait(Until.newWindow(), CLICK_TIMEOUT);
         } else {
-            Log.d("msg", "btnYoutube is null");
+            Log.d("msg", "btnMyCollectinon is null");
         }
 
-//        mDevice.wait(Until.hasObject(By.desc("計算機")), LAUNCH_TIMEOUT);
-//        mDevice.findObject(By.desc("計算機")).click();
     }
 
 
